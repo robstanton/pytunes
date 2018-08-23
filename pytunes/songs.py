@@ -24,7 +24,8 @@ def get_song_metadata(path):
         # Read tags from file, raise error if can't
         tags = eyed3.load(path)
         if tags is None:
-            raise ValueError("Error: {} is not a valid MP3 file").format(path)
+            msg = path + " is not a valid mp3 file"
+            raise ValueError(msg)
     except ValueError as err:
         print(err)
         raise
