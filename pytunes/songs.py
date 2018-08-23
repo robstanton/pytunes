@@ -1,6 +1,7 @@
 # Module containing all methods for dealing with songs
 
 import os
+import eyed3
 
   
 def get_songs_from_library(path):
@@ -18,5 +19,13 @@ def get_songs_from_library(path):
         
   
 def get_song_metadata(path):
-    """Return a tuple containing the tags and other metadata for the song."""
+    #Return a dictionary containing the tags and other metadata for a song#
+    try:
+        # Read tags from file, raise error if can't
+        tags = eyed3.load(path)
+        if tags is None:
+            raise ValueError("Error: {} is not a valid MP3 file").format(path)
+    except ValueError as err:
+        print(err)
+        raise
     pass
