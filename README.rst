@@ -1,6 +1,8 @@
-# pytunes
+pytunes
+=======
 
-## Features
+Features
+--------
 
 * Combines two music libraries together
 * These libraries can be from itunes or any arbitory folder structure
