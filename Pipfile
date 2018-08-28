@@ -7,6 +7,7 @@ name = "pypi"
 "eyed3" = "*"
 pytest-datafiles = "*"
 mutagen = "*"
+discogs-client = "*"
 
 [dev-packages]
 
