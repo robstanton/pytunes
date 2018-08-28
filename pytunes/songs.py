@@ -5,7 +5,8 @@ import eyed3
 
   
 def get_songs_from_library(path):
-    # Return a list of dictionarys containing all the songs found in a directory and it's subdirectories
+    # Returns a dict of all the songs found in a directory and it's subdirectories, the key for the dict is artist:albulm:song
+    songs = {}
     try:
         # Check the path points to a valid directory
         if os.path.isdir(path) is False:
@@ -18,10 +19,23 @@ def get_songs_from_library(path):
         for filename in filenames:
             path = os.path.join(root,filename)
             song = get_song_metadata(path)
-            #print (filename)
-            #print (os.path.join(root,filename))
-            
-    songs = []
+            if song is not None:
+                song_key = ""
+                sub_keys = [song["artist"],song["album"],song["title"]]
+                for k in sub_keys:
+                    if k is not None:
+                        k =  k.replace(" ", "").upper()
+                    else:
+                        k = "UNKNOWN"
+                    
+                    song_key = song_key + ":" + k
+                   
+                
+                print ("song_key is " + song_key)           
+                songs[song_key] = song
+                
+                
+    
     return songs
         
   
@@ -38,12 +52,21 @@ def get_song_metadata(path):
        
         song_data.update(
             [
+                
                 ('artist', song.tag.artist) ,
-                ('title', song.tag.artist) ,
-                ('album', song.tag.artist) , 
-                ('album_artist', song.tag.album_artist) 
+                ('title', song.tag.title) ,
+                ('album', song.tag.album) , 
+                ('album_artist', song.tag.album_artist),
+                ('track_num', song.tag.track_num),
+                ('genre_name', song.tag.genre.name if song.tag.genre is not None else None),
+                ('genre_id', song.tag.genre.id if song.tag.genre is not None else None),
+                ('time_secs', song.info.time_secs),
+                ('size_bytes', song.info.size_bytes),
+                ('file_name', os.path.basename(song.path)),
+                ('path', song.path) 
+                
             ]
         )
-        print(song_data)
+        
     return song_data
     
