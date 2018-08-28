@@ -17,3 +17,9 @@ Features
 * Oraganises new library by Artist > Album > Songs
 * Songs with no album are put the root of the artists folder
 * Filename is set at "ARTIST_SONG_TITLE"
+
+Setup
+-----
+
+Ensure you have a file called local_config.py in the root of the project (copy example_config.py).
+Enter paths and secrets according to your environment, this file is already in .gitignore. 
