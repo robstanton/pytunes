@@ -6,8 +6,13 @@ from fuzzywuzzy import fuzz
 from operator import itemgetter
 
 def get_sec(time_str):
-    m, s = time_str.split(':')
-    return  int(m) * 60 + int(s)
+    try:
+      m, s = time_str.split(':')
+      secs = int(m) * 60 + int(s)
+    except:
+      secs = None
+    
+    return secs
 
 def search_for_song_data(query):
   payload = {'q': query, 'key': local_config.consumer_key,'secret': local_config.consumer_secret}
@@ -24,12 +29,24 @@ def search_for_song_data(query):
     if a['join'] != '':
       join = ' ' + a['join'] + ' '
       release_artist += join
-      
+  
+  
+  # Get list of genres both the genre and styles tags
+  release_genres = ''
+  for count,g in enumerate(release_details['genres']):
+    if count > 0:
+      genre = ';' + g
+    else:
+      genre = g
+    release_genres += genre
+  for s in release_details['styles']:
+    style = ';' + s
+    release_genres += style
+    
   # Get the tracks from the release
   tracks = []
   for t in release_details['tracklist']:
     if t['type_'] == 'track':
-      
       # Score the track title on how close it is to our search
       match_score = fuzz.token_set_ratio(t['title'],query)
       
@@ -48,6 +65,7 @@ def search_for_song_data(query):
                       'track_title' : t['title'],
                       'match_score' : match_score,
                       'track_artist' : track_artist,
+                      'track_position' : t['position'],
                       'track_duration': get_sec(t['duration'])
                       
                     }
@@ -65,13 +83,10 @@ def search_for_song_data(query):
                 ('title', track_details['track_title']) ,
                 ('album', release_details['title']) , 
                 ('album_artist', release_artist),
-               # ('track_num', song.tag.track_num),
-               # ('genre_name', song.tag.genre.name if song.tag.genre is not None else None),
-               # ('genre_id', song.tag.genre.id if song.tag.genre is not None else None),
-               # ('time_secs', song.info.time_secs),
-               # ('size_bytes', song.info.size_bytes),
-               # ('file_name', os.path.basename(song.path)),
-               # ('path', song.path) 
+                ('track_num', track_details['track_position']),
+                ('genre', release_genres ),
+                ('time_secs', track_details['track_duration'])
+               
                 
             ]
         )
@@ -79,5 +94,5 @@ def search_for_song_data(query):
   print(song_data)
   
   
-  pass
+  return song_data
   
