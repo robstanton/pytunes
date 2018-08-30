@@ -20,7 +20,7 @@ def test_validates_path():
     
     
     
-def test_returns_dict(tmpdir):
+def test_returns_di(tmpdir):
     returned = songs.get_songs_from_library(tmpdir)
     assert  isinstance(returned, dict)
     

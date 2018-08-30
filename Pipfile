@@ -8,6 +8,8 @@ name = "pypi"
 pytest-datafiles = "*"
 mutagen = "*"
 discogs-client = "*"
+requests = "*"
+fuzzywuzzy = {version = "*", extras = ["speedup"]}
 
 [dev-packages]
 
